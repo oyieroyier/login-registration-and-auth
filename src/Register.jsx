@@ -40,6 +40,35 @@ const Register = () => {
 
 	const [errMsg, setErrMsg] = useState('');
 	const [success, setSuccess] = useState(false); // If we successfully submit the form or not.
+
+	// To set the focus on the username input when the component loads.
+	useEffect(() => {
+		userRef.current.focus();
+	}, []);
+
+	// Another useEffect to validate the username.
+	// user is now in the dependency array. When the value changes it runs a validation
+	useEffect(() => {
+		const result = USER_REGEX.test(user);
+		console.log(result);
+		console.log(user);
+		setValidName(result);
+	}, [user]);
+
+	useEffect(() => {
+		const result = PWD_REGEX.test(pwd);
+		console.log(result);
+		console.log(pwd);
+		setValidPwd(result);
+		const match = pwd === matchPwd;
+		setValidMatchPwd(match);
+	}, [pwd, matchPwd]);
+
+	// If the user changes one of the fields inside the dependency array, we clear out the error message
+	useEffect(() => {
+		setErrMsg('');
+	}, [user, pwd, matchPwd]);
+
 	return <div></div>;
 };
 
