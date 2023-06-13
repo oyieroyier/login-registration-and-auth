@@ -20,7 +20,27 @@ const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=[A-Z])(?=.*[0-9])(?=.[!@#$%]).{8,24 }$/;
 
 const Register = () => {
-	return <div>Register</div>;
+	const userRef = useRef(); // Enables us to set the focus on the user input when the component loads.
+	const errRef = useRef(); // Enables us to set the focus on an error if we encounter one so it can be read by a screen reader for accessibility.
+
+	// User field states.
+	const [user, setUser] = useState('');
+	const [validName, setValidName] = useState(false); // Is tied to whether the name validates or not.
+	const [userFocus, setUserFocus] = useState(false); // Is tied to whether we are focused on the user input field or not.
+
+	// Password field states.
+	const [pwd, setPwd] = useState('');
+	const [validPwd, setValidPwd] = useState(false); // Is tied to whether the password validates or not
+	const [pwdFocus, setPwdFocus] = useState(false); // Is tied to whether we are focused on the password input field or not.
+
+	// Match Password states.
+	const [matchPwd, setMatchPwd] = useState('');
+	const [validMatchPwd, setValidMatchPwd] = useState(false); // Is tied to whether the repeated password matches or not.
+	const [matchFocus, setMatchFocus] = useState(false); // Is tied to whether we are focused on the confirm password input field or not.
+
+	const [errMsg, setErrMsg] = useState('');
+	const [success, setSuccess] = useState(false); // If we successfully submit the form or not.
+	return <div></div>;
 };
 
 export default Register;
