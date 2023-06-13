@@ -78,6 +78,42 @@ const Register = () => {
 			>
 				{errMsg}{' '}
 			</p>
+			<h1>Register</h1>
+			<form>
+				<label htmlFor="username">
+					Username:
+					<span className={validName ? 'valid' : 'hide'}>
+						{' '}
+						<FaCheck />
+					</span>
+					<span className={validName || !user ? 'hide' : 'invalid'}>
+						<FaTimes />
+					</span>
+				</label>
+				<input
+					type="text"
+					id="username" // must match the htmlFor attribute
+					ref={userRef} // Allows us to set focus on the input.
+					autoComplete="off" // We don't want to see previous values that others may have entered in this field
+					required
+					onChange={(e) => setUser(e.target.value)}
+					aria-invalid={validName ? 'false' : 'true'} // Set to true when the component loads because when at that point we will not have a valid name. Helps screen reader announce whether the input needs adjusting before the form is submitted
+					aria-describedby="uidnote" // Tells the screen reader how to describe this input area. Screen reader first reads the label > type > aria-invalid > aria-describedby
+					onFocus={() => setUserFocus(true)}
+					onBlur={() => setUserFocus(false)} // When you leave the input field
+				/>
+				{/* This is the paragraph describing the input field above. */}
+				<p
+					id="uidnote"
+					className={
+						userFocus && user && !validName ? 'instructions' : 'offscreen'
+					}
+				>
+					<FaInfoCircle /> 4 to 24 characters <br />
+					Must begin with a letter <br />
+					Letters, numbers, underscores, hyphens allowed.
+				</p>
+			</form>
 		</section>
 	);
 };
