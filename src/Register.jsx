@@ -17,7 +17,7 @@ const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 		4. At least one special character.
 		5. The password itself can anywhere from 8 to 24 characters.
 */
-const PWD_REGEX = /^(?=.*[a-z])(?=[A-Z])(?=.*[0-9])(?=.[!@#$%]).{8,24 }$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Register = () => {
 	const userRef = useRef(); // Enables us to set the focus on the user input when the component loads.
@@ -112,6 +112,42 @@ const Register = () => {
 					<FaInfoCircle /> 4 to 24 characters <br />
 					Must begin with a letter <br />
 					Letters, numbers, underscores, hyphens allowed.
+				</p>
+
+				<label htmlFor="password">
+					Password:
+					<span className={validPwd ? 'valid' : 'hide'}>
+						<FaCheck />
+					</span>
+					<span className={validPwd || !pwd ? 'hide' : 'invalid'}>
+						<FaTimes />
+					</span>
+				</label>
+				<input
+					type="password"
+					id="password"
+					required
+					onChange={(e) => setPwd(e.target.value)}
+					aria-invalid={validPwd ? 'false' : 'true'}
+					aria-describedby="pwdnote"
+					onFocus={() => setPwdFocus(true)}
+					onBlur={() => setPwdFocus(false)}
+				/>
+				<p
+					id="pwdnote"
+					className={pwdFocus && !validPwd ? 'instructions' : 'offscreen'}
+				>
+					<FaInfoCircle />
+					8 to 24 characters <br />
+					Must include upper and lowercase letters, a number, and a special
+					character. <br />
+					Allowed special characters:{' '}
+					<span aria-label="exclamation mark">!</span>
+					<span aria-label="at symbol">@</span>
+					<span aria-label="hashtag">#</span>
+					<span aria-label="dollar sign">$</span>
+					<span aria-label="percent">%</span>
+					{/* aria-label attributes enable screen readers to read the description of each element */}
 				</p>
 			</form>
 		</section>
