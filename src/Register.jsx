@@ -183,7 +183,21 @@ const Register = () => {
 					<FaInfoCircle />
 					Must match the first password input field.
 				</p>
+				<button
+					disabled={!validName || !validPwd || !validMatchPwd ? true : false}
+				>
+					{' '}
+					Sign Up{' '}
+				</button>
 			</form>
+			<p>
+				{' '}
+				Already registered? <br />
+				<span className="line">
+					{/* Router link would go here. */}
+					<a href="#"> Sign In</a>
+				</span>
+			</p>
 		</section>
 	);
 };

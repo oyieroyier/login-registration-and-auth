@@ -71,6 +71,7 @@ button {
 
 button {
 	padding: 0.5rem;
+	background-color: #ccc;
 }
 
 .instructions {
