@@ -80,6 +80,8 @@ const Register = () => {
 			</p>
 			<h1>Register</h1>
 			<form>
+				{/* USERNAME INPUT */}
+
 				<label htmlFor="username">
 					Username:
 					<span className={validName ? 'valid' : 'hide'}>
@@ -113,6 +115,8 @@ const Register = () => {
 					Must begin with a letter <br />
 					Letters, numbers, underscores, hyphens allowed.
 				</p>
+
+				{/* PASSWORD INPUT */}
 
 				<label htmlFor="password">
 					Password:
@@ -148,6 +152,36 @@ const Register = () => {
 					<span aria-label="dollar sign">$</span>
 					<span aria-label="percent">%</span>
 					{/* aria-label attributes enable screen readers to read the description of each element */}
+				</p>
+
+				{/* CONFIRM PASSWORD INPUT */}
+				<label htmlFor="confirm_pwd">
+					Confirm Password:
+					<span className={validMatchPwd && matchPwd ? 'valid' : 'hide'}>
+						<FaCheck />
+					</span>
+					<span className={validMatchPwd || !matchPwd ? 'hide' : 'invalid'}>
+						<FaTimes />
+					</span>
+				</label>
+				<input
+					type="password"
+					id="confirm_pwd"
+					required
+					onChange={(e) => setMatchPwd(e.target.value)}
+					aria-invalid={validMatchPwd ? 'false' : 'true'}
+					aria-describedby="confirmnote"
+					onFocus={() => setMatchFocus(true)}
+					onBlur={() => setMatchFocus(false)}
+				/>
+				<p
+					id="confirmnote"
+					className={
+						matchFocus && !validMatchPwd ? 'instructions' : 'offscreen'
+					}
+				>
+					<FaInfoCircle />
+					Must match the first password input field.
 				</p>
 			</form>
 		</section>
