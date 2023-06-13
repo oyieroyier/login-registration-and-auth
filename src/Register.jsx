@@ -69,7 +69,17 @@ const Register = () => {
 		setErrMsg('');
 	}, [user, pwd, matchPwd]);
 
-	return <div></div>;
+	return (
+		<section>
+			<p
+				ref={errRef}
+				className={errMsg ? 'errmsg' : 'offscreen'}
+				aria-live="assertive" // Means if there is an error it will be read out by a screen reader
+			>
+				{errMsg}{' '}
+			</p>
+		</section>
+	);
 };
 
 export default Register;
