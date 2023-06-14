@@ -69,136 +69,164 @@ const Register = () => {
 		setErrMsg('');
 	}, [user, pwd, matchPwd]);
 
+	async function handleSubmit(e) {
+		e.preventDefault();
+
+		// Code to prevent hacking of Submit button to enable it.
+		const v1 = USER_REGEX.test(user);
+		const v2 = PWD_REGEX.test(pwd);
+
+		if (!v1 || !v2) {
+			setErrMsg('Invalid Entry');
+			return;
+		}
+
+		console.log(user, pwd);
+		setSuccess(true);
+	}
 	return (
-		<section>
-			<p
-				ref={errRef}
-				className={errMsg ? 'errmsg' : 'offscreen'}
-				aria-live="assertive" // Means if there is an error it will be read out by a screen reader
-			>
-				{errMsg}{' '}
-			</p>
-			<h1>Register</h1>
-			<form>
-				{/* USERNAME INPUT */}
+		<>
+			{success ? (
+				<section>
+					<h1>Success!</h1>
+					<p>
+						<a href="#">Sign In</a>
+					</p>
+				</section>
+			) : (
+				<section>
+					<p
+						ref={errRef}
+						className={errMsg ? 'errmsg' : 'offscreen'}
+						aria-live="assertive" // Means if there is an error it will be read out by a screen reader
+					>
+						{errMsg}{' '}
+					</p>
+					<h1>Register</h1>
+					<form onSubmit={handleSubmit}>
+						{/* USERNAME INPUT */}
 
-				<label htmlFor="username">
-					Username:
-					<span className={validName ? 'valid' : 'hide'}>
+						<label htmlFor="username">
+							Username:
+							<span className={validName ? 'valid' : 'hide'}>
+								{' '}
+								<FaCheck />
+							</span>
+							<span className={validName || !user ? 'hide' : 'invalid'}>
+								<FaTimes />
+							</span>
+						</label>
+						<input
+							type="text"
+							id="username" // must match the htmlFor attribute
+							ref={userRef} // Allows us to set focus on the input.
+							autoComplete="off" // We don't want to see previous values that others may have entered in this field
+							required
+							onChange={(e) => setUser(e.target.value)}
+							aria-invalid={validName ? 'false' : 'true'} // Set to true when the component loads because when at that point we will not have a valid name. Helps screen reader announce whether the input needs adjusting before the form is submitted
+							aria-describedby="uidnote" // Tells the screen reader how to describe this input area. Screen reader first reads the label > type > aria-invalid > aria-describedby
+							onFocus={() => setUserFocus(true)}
+							onBlur={() => setUserFocus(false)} // When you leave the input field
+						/>
+						{/* This is the paragraph describing the input field above. */}
+						<p
+							id="uidnote"
+							className={
+								userFocus && user && !validName ? 'instructions' : 'offscreen'
+							}
+						>
+							<FaInfoCircle /> 4 to 24 characters <br />
+							Must begin with a letter <br />
+							Letters, numbers, underscores, hyphens allowed.
+						</p>
+
+						{/* PASSWORD INPUT */}
+
+						<label htmlFor="password">
+							Password:
+							<span className={validPwd ? 'valid' : 'hide'}>
+								<FaCheck />
+							</span>
+							<span className={validPwd || !pwd ? 'hide' : 'invalid'}>
+								<FaTimes />
+							</span>
+						</label>
+						<input
+							type="password"
+							id="password"
+							required
+							onChange={(e) => setPwd(e.target.value)}
+							aria-invalid={validPwd ? 'false' : 'true'}
+							aria-describedby="pwdnote"
+							onFocus={() => setPwdFocus(true)}
+							onBlur={() => setPwdFocus(false)}
+						/>
+						<p
+							id="pwdnote"
+							className={pwdFocus && !validPwd ? 'instructions' : 'offscreen'}
+						>
+							<FaInfoCircle />
+							8 to 24 characters <br />
+							Must include upper and lowercase letters, a number, and a special
+							character. <br />
+							Allowed special characters:{' '}
+							<span aria-label="exclamation mark">!</span>
+							<span aria-label="at symbol">@</span>
+							<span aria-label="hashtag">#</span>
+							<span aria-label="dollar sign">$</span>
+							<span aria-label="percent">%</span>
+							{/* aria-label attributes enable screen readers to read the description of each element */}
+						</p>
+
+						{/* CONFIRM PASSWORD INPUT */}
+						<label htmlFor="confirm_pwd">
+							Confirm Password:
+							<span className={validMatchPwd && matchPwd ? 'valid' : 'hide'}>
+								<FaCheck />
+							</span>
+							<span className={validMatchPwd || !matchPwd ? 'hide' : 'invalid'}>
+								<FaTimes />
+							</span>
+						</label>
+						<input
+							type="password"
+							id="confirm_pwd"
+							required
+							onChange={(e) => setMatchPwd(e.target.value)}
+							aria-invalid={validMatchPwd ? 'false' : 'true'}
+							aria-describedby="confirmnote"
+							onFocus={() => setMatchFocus(true)}
+							onBlur={() => setMatchFocus(false)}
+						/>
+						<p
+							id="confirmnote"
+							className={
+								matchFocus && !validMatchPwd ? 'instructions' : 'offscreen'
+							}
+						>
+							<FaInfoCircle />
+							Must match the first password input field.
+						</p>
+						<button
+							disabled={
+								!validName || !validPwd || !validMatchPwd ? true : false
+							}
+						>
+							{' '}
+							Sign Up{' '}
+						</button>
+					</form>
+					<p>
 						{' '}
-						<FaCheck />
-					</span>
-					<span className={validName || !user ? 'hide' : 'invalid'}>
-						<FaTimes />
-					</span>
-				</label>
-				<input
-					type="text"
-					id="username" // must match the htmlFor attribute
-					ref={userRef} // Allows us to set focus on the input.
-					autoComplete="off" // We don't want to see previous values that others may have entered in this field
-					required
-					onChange={(e) => setUser(e.target.value)}
-					aria-invalid={validName ? 'false' : 'true'} // Set to true when the component loads because when at that point we will not have a valid name. Helps screen reader announce whether the input needs adjusting before the form is submitted
-					aria-describedby="uidnote" // Tells the screen reader how to describe this input area. Screen reader first reads the label > type > aria-invalid > aria-describedby
-					onFocus={() => setUserFocus(true)}
-					onBlur={() => setUserFocus(false)} // When you leave the input field
-				/>
-				{/* This is the paragraph describing the input field above. */}
-				<p
-					id="uidnote"
-					className={
-						userFocus && user && !validName ? 'instructions' : 'offscreen'
-					}
-				>
-					<FaInfoCircle /> 4 to 24 characters <br />
-					Must begin with a letter <br />
-					Letters, numbers, underscores, hyphens allowed.
-				</p>
-
-				{/* PASSWORD INPUT */}
-
-				<label htmlFor="password">
-					Password:
-					<span className={validPwd ? 'valid' : 'hide'}>
-						<FaCheck />
-					</span>
-					<span className={validPwd || !pwd ? 'hide' : 'invalid'}>
-						<FaTimes />
-					</span>
-				</label>
-				<input
-					type="password"
-					id="password"
-					required
-					onChange={(e) => setPwd(e.target.value)}
-					aria-invalid={validPwd ? 'false' : 'true'}
-					aria-describedby="pwdnote"
-					onFocus={() => setPwdFocus(true)}
-					onBlur={() => setPwdFocus(false)}
-				/>
-				<p
-					id="pwdnote"
-					className={pwdFocus && !validPwd ? 'instructions' : 'offscreen'}
-				>
-					<FaInfoCircle />
-					8 to 24 characters <br />
-					Must include upper and lowercase letters, a number, and a special
-					character. <br />
-					Allowed special characters:{' '}
-					<span aria-label="exclamation mark">!</span>
-					<span aria-label="at symbol">@</span>
-					<span aria-label="hashtag">#</span>
-					<span aria-label="dollar sign">$</span>
-					<span aria-label="percent">%</span>
-					{/* aria-label attributes enable screen readers to read the description of each element */}
-				</p>
-
-				{/* CONFIRM PASSWORD INPUT */}
-				<label htmlFor="confirm_pwd">
-					Confirm Password:
-					<span className={validMatchPwd && matchPwd ? 'valid' : 'hide'}>
-						<FaCheck />
-					</span>
-					<span className={validMatchPwd || !matchPwd ? 'hide' : 'invalid'}>
-						<FaTimes />
-					</span>
-				</label>
-				<input
-					type="password"
-					id="confirm_pwd"
-					required
-					onChange={(e) => setMatchPwd(e.target.value)}
-					aria-invalid={validMatchPwd ? 'false' : 'true'}
-					aria-describedby="confirmnote"
-					onFocus={() => setMatchFocus(true)}
-					onBlur={() => setMatchFocus(false)}
-				/>
-				<p
-					id="confirmnote"
-					className={
-						matchFocus && !validMatchPwd ? 'instructions' : 'offscreen'
-					}
-				>
-					<FaInfoCircle />
-					Must match the first password input field.
-				</p>
-				<button
-					disabled={!validName || !validPwd || !validMatchPwd ? true : false}
-				>
-					{' '}
-					Sign Up{' '}
-				</button>
-			</form>
-			<p>
-				{' '}
-				Already registered? <br />
-				<span className="line">
-					{/* Router link would go here. */}
-					<a href="#"> Sign In</a>
-				</span>
-			</p>
-		</section>
+						Already registered? <br />
+						<span className="line">
+							{/* Router link would go here. */}
+							<a href="#"> Sign In</a>
+						</span>
+					</p>
+				</section>
+			)}
+		</>
 	);
 };
 
